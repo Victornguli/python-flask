@@ -7,7 +7,7 @@ class BaseConfig(object):
 	DEBUG = False
 	CSRF_ENABLED = True
 	SECRET = os.getenv('SECRET')
-	SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI') or 'sqlite:///' + os.path.join(basedir, 'dev.db')
+	SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
 
 
 class DevelopmentConfig(BaseConfig):
@@ -18,7 +18,7 @@ class DevelopmentConfig(BaseConfig):
 class TestingConfig(BaseConfig):
 	"""Configurations for testing, with a separate database"""
 	TESTING = True
-	SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI') or 'sqlite:///' + os.path.join(basedir, 'test.db')
+	SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI') or 'sqlite:///' + os.path.join(basedir, 'test_db.db')
 	DEBUG = True
 
 

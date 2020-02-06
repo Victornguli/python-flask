@@ -18,7 +18,7 @@ class DevelopmentConfig(BaseConfig):
 class TestingConfig(BaseConfig):
 	"""Configurations for testing, with a separate database"""
 	TESTING = True
-	SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI') or 'sqlite:///' + os.path.join(basedir, 'test_db.db')
+	SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_TEST_DATABASE_URI')
 	DEBUG = True
 
 

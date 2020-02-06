@@ -1,4 +1,35 @@
 from app import db
+from flask_bcrypt import Bcrypt
+
+
+class User(db.Model):
+	""""Model representing users table"""
+
+	__tablename__ = "users"
+
+	id = db.Column(db.Integer, primary_key = True)
+	email = db.Column(db.String(256), nullable = False, unique = True)
+	password = db.Column(db.String(256), nullable = False)
+	bucketlists = db.relationship(
+		'BucketList', order_by = 'BucketList.id', cascade = 'all, delete-orphan'
+	)
+
+	def __init__(self, email, password):
+		"""Initializes the user model with a password and email"""
+		self.email = email
+		self.password = Bcrypt().generate_password_hash(password).decode()
+
+	def password_is_valid(self, password):
+		"""Checks a submitted password against its stored hash"""
+		return Bcrypt.check_password_hash(self.password, password)
+
+	def save(self):
+		"""Save a user to a database. This includes creating a new user and editing too"""
+		db.session.add(self)
+		db.session().commit()
+
+	def __repr__(self):
+		return self.email
 
 
 class BucketList(db.Model):
@@ -31,4 +62,3 @@ class BucketList(db.Model):
 
 	def __repr__(self):
 		return "<Bucketlist: {}>".format(self.name)
-

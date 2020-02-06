@@ -1,5 +1,8 @@
 from app import db
+from flask import current_app
 from flask_bcrypt import Bcrypt
+import jwt
+from datetime import datetime, timedelta
 
 
 class User(db.Model):
@@ -28,6 +31,31 @@ class User(db.Model):
 		db.session.add(self)
 		db.session().commit()
 
+	def generate_token(self, user_id):
+		"""Generates JWT Token for user authorization"""
+		try:
+			payload = {
+				'exp': datetime.utcnow() + timedelta(minutes = 5),
+				'iat': datetime.utcnow(),
+				'sub': user_id
+			}
+
+			jwt_string = jwt.encode(payload, current_app.config.get('SECRET'), algorithm = 'HS256')
+			return jwt_string
+		except Exception as ex:
+			return str(ex)
+
+	@staticmethod
+	def decode_token(token):
+		"""Decodes the access token for user Authorization"""
+		try:
+			payload = jwt.decode(token, current_app.config.get('SECRET'))
+			return payload['sub']
+		except jwt.ExpiredSignatureError:
+			return "Expired token. Login to get a new token"
+		except jwt.InvalidTokenError:
+			return "Invalid token. Register or Login to continue"
+
 	def __repr__(self):
 		return self.email
 
@@ -43,6 +71,7 @@ class BucketList(db.Model):
 	date_modified = db.Column(
 		db.DateTime, default = db.func.current_timestamp(),
 		onupdate = db.func.current_timestamp())
+	user = db.Column(db.Integer, db.ForeignKey('users.id'), nullable = True)
 
 	def __init__(self, name):
 		"""initialize with name."""

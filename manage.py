@@ -4,7 +4,7 @@ from flask_migrate import Migrate, MigrateCommand
 from app import db, create_app
 import unittest
 
-app = create_app(config_name = os.getenv('APP_SETTINGS') or 'development')
+app = create_app('testing')
 migrate = Migrate(app, db)
 manager = Manager(app)
 

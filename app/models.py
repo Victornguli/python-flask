@@ -24,7 +24,7 @@ class User(db.Model):
 
 	def password_is_valid(self, password):
 		"""Checks a submitted password against its stored hash"""
-		return Bcrypt.check_password_hash(self.password, password)
+		return Bcrypt().check_password_hash(self.password, password)
 
 	def save(self):
 		"""Save a user to a database. This includes creating a new user and editing too"""

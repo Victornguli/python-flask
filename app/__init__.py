@@ -1,3 +1,4 @@
+import os
 from flask_api import FlaskAPI
 from flask_sqlalchemy import SQLAlchemy
 from flask import request, jsonify, abort
@@ -86,4 +87,3 @@ def create_app(config_name):
 	app.register_blueprint(auth_blueprint)
 
 	return app
-

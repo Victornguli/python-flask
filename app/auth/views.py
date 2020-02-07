@@ -72,10 +72,10 @@ class LoginView(MethodView):
                 return make_response(jsonify(response)), 401
 
         except Exception as e:
+            # raise e
             # Create a response containing an string error message
             response = {
-                'message': str(e),
-                'weird': 'weird'
+                'message': str(e)
             }
             # Return a server error using the HTTP Error Code 500 (Internal Server Error)
             return make_response(jsonify(response)), 500

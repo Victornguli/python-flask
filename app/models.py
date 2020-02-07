@@ -39,10 +39,10 @@ class User(db.Model):
 				'iat': datetime.utcnow(),
 				'sub': user_id
 			}
-
 			jwt_string = jwt.encode(payload, current_app.config.get('SECRET'), algorithm = 'HS256')
 			return jwt_string
 		except Exception as ex:
+			# raise ex
 			return str(ex)
 
 	@staticmethod

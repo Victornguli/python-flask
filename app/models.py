@@ -1,16 +1,26 @@
+from datetime import datetime, timedelta
+import jwt
 from app import db
 from flask import current_app
 from flask_bcrypt import Bcrypt
-import jwt
-from datetime import datetime, timedelta
+from sqlalchemy.dialects.postgresql import UUID
 
 
-class User(db.Model):
+class BaseModel(db.Model):
+	__abstract__ = True
+
+	"""Base Model class. Other models inherit this class for repetitive fields"""
+	id = db.Column(UUID(as_uuid = True), unique = True, nullable = False, primary_key = True)
+	date_created = db.Column(db.DateTime, default = db.func.current_timestamp())
+	date_modified = db.Column(
+		db.DateTime, default = db.func.current_timestamp(), onupdate = db.func.current_timestamp())
+
+
+class User(BaseModel):
 	""""Model representing users table"""
 
 	__tablename__ = "users"
 
-	id = db.Column(db.Integer, primary_key = True)
 	email = db.Column(db.String(256), nullable = False, unique = True)
 	password = db.Column(db.String(256), nullable = False)
 	bucketlists = db.relationship(
@@ -60,18 +70,13 @@ class User(db.Model):
 		return self.email
 
 
-class BucketList(db.Model):
+class BucketList(BaseModel):
 	"""Model representing bucket list table"""
 
 	__tablename__ = 'bucketlists'
 
-	id = db.Column(db.Integer, primary_key = True)
 	name = db.Column(db.String(255))
-	date_created = db.Column(db.DateTime, default = db.func.current_timestamp())
-	date_modified = db.Column(
-		db.DateTime, default = db.func.current_timestamp(),
-		onupdate = db.func.current_timestamp())
-	user = db.Column(db.Integer, db.ForeignKey('users.id'), nullable = True)
+	user = db.Column(UUID(as_uuid = True), db.ForeignKey('users.id'), nullable = True)
 
 	def __init__(self, name):
 		"""initialize with name."""

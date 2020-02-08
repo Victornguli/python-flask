@@ -1,4 +1,3 @@
-import os
 from flask_api import FlaskAPI
 from flask_sqlalchemy import SQLAlchemy
 from flask import request, jsonify, abort
@@ -10,6 +9,7 @@ db = SQLAlchemy()
 
 def create_app(config_name):
 	from app.models import BucketList
+	from app.models import User
 	app = FlaskAPI(__name__, instance_relative_config = True)
 	app.config.from_object(app_config[config_name])
 	app.config.from_pyfile('config.py')
@@ -32,9 +32,9 @@ def create_app(config_name):
 				response.status_code = 201
 				return response
 		else:
-			bucketlists = BucketList.get_all()
+			bucketlists = User.query.all().count()
 			results = []
-
+			return 'Count: ' + str(bucketlists)
 			for bucketlist in bucketlists:
 				obj = {
 					'id': bucketlist.id,
@@ -43,6 +43,7 @@ def create_app(config_name):
 					'date_modified': bucketlist.date_modified
 				}
 				results.append(obj)
+			return "success"
 			response = jsonify(results)
 			response.status_code = 200
 			return {"message": "succeess"}

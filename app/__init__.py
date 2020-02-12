@@ -32,7 +32,7 @@ def create_app(config_name):
 				response.status_code = 201
 				return response
 		else:
-			bucketlists = User.query.all().count()
+			bucketlists = User.query.all()
 			results = []
 			return 'Count: ' + str(bucketlists)
 			for bucketlist in bucketlists:

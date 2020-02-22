@@ -14,7 +14,7 @@ Simple Restful API in Python's micro-framework Flask. A bucketlist is a list of 
  
  ### How to Run
  
- git clone
+ Clone the repo by typing git clone https://github.com/Victornguli/python-flask.git on your shell
  
  pip install -r requirements txt
  

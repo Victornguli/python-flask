@@ -19,3 +19,9 @@ Simple Restful API in Python's micro-framework Flask. A bucketlist is a list of 
  pip install -r requirements txt
  
  configure your environement variables in .flaskenv
+
+To run server type:
+
+    python run.py
+  
+    
